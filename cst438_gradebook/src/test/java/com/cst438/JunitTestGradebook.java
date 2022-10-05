@@ -23,6 +23,7 @@ import com.cst438.controllers.GradeBookController;
 import com.cst438.domain.Assignment;
 import com.cst438.domain.AssignmentGrade;
 import com.cst438.domain.AssignmentGradeRepository;
+import com.cst438.domain.AssignmentListDTO.AssignmentDTO;
 import com.cst438.domain.AssignmentRepository;
 import com.cst438.domain.Course;
 import com.cst438.domain.CourseRepository;
@@ -52,12 +53,15 @@ import org.springframework.test.context.ContextConfiguration;
 public class JunitTestGradebook {
 
 	static final String URL = "http://localhost:8080";
+//	static final String URL2 = "http://localhost:8081";
 	public static final int TEST_COURSE_ID = 40442;
 	public static final String TEST_STUDENT_EMAIL = "test@csumb.edu";
 	public static final String TEST_STUDENT_NAME = "test";
 	public static final String TEST_INSTRUCTOR_EMAIL = "dwisneski@csumb.edu";
 	public static final int TEST_YEAR = 2021;
 	public static final String TEST_SEMESTER = "Fall";
+	public static final String DUE_DATE  = "2000-01-01";
+	public static final String COURSE_NAME = "Python";
 
 	@MockBean
 	AssignmentRepository assignmentRepository;
@@ -73,6 +77,43 @@ public class JunitTestGradebook {
 
 	@Autowired
 	private MockMvc mvc;
+	
+	@Test
+	public void addAssignment() throws Exception {
+		MockHttpServletResponse response;
+		
+		AssignmentDTO mockAssignment = new AssignmentDTO();
+		mockAssignment.assignmentId = 1;
+		mockAssignment.courseId = TEST_COURSE_ID;
+		mockAssignment.dueDate = DUE_DATE;
+	
+		// then do an http get request for assignment 1
+				response = mvc.perform(MockMvcRequestBuilders.get("/assignment").accept(MediaType.APPLICATION_JSON)
+						.content(asJsonString(mockAssignment)).contentType(MediaType.APPLICATION_JSON))
+						.andReturn().getResponse();
+
+				// verify return data with entry for one student without no score
+				assertEquals(200, response.getStatus());
+
+				// verify that a save was called on repository
+				verify(assignmentRepository, times(1)).save(any()); // ???
+
+				// verify that returned data has non zero primary key
+				AssignmentDTO result = fromJsonString(response.getContentAsString(), AssignmentDTO.class);
+				// assignment id is 1
+				assertEquals(1, result.assignmentId);
+				assertEquals(DUE_DATE, result.dueDate);
+				assertEquals(TEST_COURSE_ID, result.courseId);
+		
+
+
+				given(assignmentRepository.findById(1)).willReturn(Optional.of(any()));
+
+		
+		
+		
+		
+	}
 
 	@Test
 	public void gradeAssignment() throws Exception {
