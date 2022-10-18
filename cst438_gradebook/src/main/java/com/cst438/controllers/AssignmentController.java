@@ -108,7 +108,7 @@ public class AssignmentController {
 //	As an instructor, I can delete an assignment  for my course (only if 
 //	there are no grades for the assignment).
 	@DeleteMapping("/assignment/{id}")
-	public void updateAssignment(@PathVariable("id") Integer id) {
+	public void deleteAssignment(@PathVariable("id") Integer id) {
 		Assignment temp = null;
 		for(Assignment curAssign : assignmentRepository.findAll()) {
 			if (curAssign.getId() == id) {
