@@ -80,13 +80,11 @@ public class AssignmentController {
 				}
 				//{Set the rest of the outAssignmentDTO variables}
 			}
-
 		return i; //return outAssignment
 	}
 	
 
 //	As an instructor, I can change the name of the assignment for my course.
-	//"/assignment/{assignmentId}"
 	@PatchMapping("/assignment/{id}/{name}") //for the url in postman
 	public void updateAssignment(@PathVariable("id") Integer id, @PathVariable("name") String newName) {
 		Assignment temp = null;
