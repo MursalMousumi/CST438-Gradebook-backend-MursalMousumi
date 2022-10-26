@@ -31,20 +31,26 @@ public class RegistrationServiceMQ extends RegistrationService {
 	}
 
 	// ----- configuration of message queues
-
 	@Autowired
 	Queue registrationQueue;
-
-
 	// ----- end of configuration of message queue
 
-	// receiver of messages from Registration service
 	
+	// receiver of messages from Registration service
 	@RabbitListener(queues = "gradebook-queue")
 	@Transactional
 	public void receive(EnrollmentDTO enrollmentDTO) {
 		
 		//TODO  complete this method in homework 4
+		System.out.println("Receive course :" + enrollmentDTO);
+
+		// process the list of student grades
+		for (CourseDTOG.GradeDTO g : enrollmentDTO.grades) {
+			Enrollment e = enrollmentRepository.findByEmailAndCourseId(g.student_email, enrollmentDTO.course_id);
+			e.setCourseGrade(g.grade);
+			enrollmentRepository.save(e);
+			System.out.println("final grade update " + g.student_email + " " + enrollmentDTO.course_id + " " + g.grade);
+		}
 		
 	}
 
@@ -54,6 +60,10 @@ public class RegistrationServiceMQ extends RegistrationService {
 		 
 		//TODO  complete this method in homework 4
 		
+		rabbitTemplate.convertAndSend(registrationQueue.getName(), courseDTO);
+		
+		System.out.println("Message send to registration service for course " + course_id);
+
 	}
 
 }

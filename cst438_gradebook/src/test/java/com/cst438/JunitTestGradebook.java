@@ -105,14 +105,7 @@ public class JunitTestGradebook {
 				assertEquals(DUE_DATE, result.dueDate);
 				assertEquals(TEST_COURSE_ID, result.courseId);
 		
-
-
 				given(assignmentRepository.findById(1)).willReturn(Optional.of(any()));
-
-		
-		
-		
-		
 	}
 
 	@Test

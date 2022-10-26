@@ -80,13 +80,11 @@ public class AssignmentController {
 				}
 				//{Set the rest of the outAssignmentDTO variables}
 			}
-
 		return i; //return outAssignment
 	}
 	
 
 //	As an instructor, I can change the name of the assignment for my course.
-	//"/assignment/{assignmentId}"
 	@PatchMapping("/assignment/{id}/{name}") //for the url in postman
 	public void updateAssignment(@PathVariable("id") Integer id, @PathVariable("name") String newName) {
 		Assignment temp = null;
@@ -108,7 +106,7 @@ public class AssignmentController {
 //	As an instructor, I can delete an assignment  for my course (only if 
 //	there are no grades for the assignment).
 	@DeleteMapping("/assignment/{id}")
-	public void updateAssignment(@PathVariable("id") Integer id) {
+	public void deleteAssignment(@PathVariable("id") Integer id) {
 		Assignment temp = null;
 		for(Assignment curAssign : assignmentRepository.findAll()) {
 			if (curAssign.getId() == id) {
