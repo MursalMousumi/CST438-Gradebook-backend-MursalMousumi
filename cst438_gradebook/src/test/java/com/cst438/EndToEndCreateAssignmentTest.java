@@ -15,31 +15,32 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.cst438.domain.Assignment;
 import com.cst438.domain.AssignmentRepository;
+import com.cst438.domain.Course;
+import com.cst438.domain.CourseRepository;
 
 @SpringBootTest
-public class EndToEndAddAssignmentTest {
+public class EndToEndCreateAssignmentTest {
 	public static final String CHROME_DRIVER_FILE_LOCATION = "C:/chromedriver_win32/chromedriver.exe";
 
 	public static final String URL = "http://localhost:3000";
 
-	public static final int TEST_STUDENT_ID = 9;
-	public static final String TEST_STUDENT_EMAIL = "test@csumb.edu";
-	public static final String TEST_STUDENT_NAME  = "test";
+	public static final int TEST_STUDENT_ID = 8;
 	public static final String TEST_ASSIGNMENT_NAME = "Test Assignment";
 	public static final String TEST_COURSE_TITLE = "Test Course";
 	public static final int SLEEP_DURATION = 1000; // 1 second.
 
 	@Autowired
-//	StudentRepository studentRepository;
 	AssignmentRepository assignmentRepository;
+	
+	@Autowired
+	CourseRepository courseRepository;
 
 	@Test
 	public void addStudent () throws Exception {
 
-//		Student x = studentRepository.findByEmail(TEST_STUDENT_EMAIL);
-		Assignment x = assignmentRepository.findById(TEST_STUDENT_ID);
+		Course x = courseRepository.findByCourse(TEST_COURSE_TITLE);
 		if (x != null) {
-			assignmentRepository.delete(x);
+			assignmentRepository.deleteById(x);
 		}
 
 		System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_FILE_LOCATION);
@@ -56,11 +57,9 @@ public class EndToEndAddAssignmentTest {
 			we.click();
 			Thread.sleep(SLEEP_DURATION);
 
-			//enter student name
 			we = driver.findElement(By.name("assignment"));
 			we.sendKeys(TEST_ASSIGNMENT_NAME);
 
-			//enter student email
 			we = driver.findElement(By.name("course"));
 			we.sendKeys(TEST_COURSE_TITLE);
 
@@ -72,7 +71,7 @@ public class EndToEndAddAssignmentTest {
 
 			System.out.println("Message of the Toast Message is: " + toastMessage);
 
-			Assert.assertEquals(toastMessage, "Assignment successfully added");
+			Assert.assertEquals(toastMessage, "Assignment successfully created");
 
 			Thread.sleep(5000);
 
